@@ -6,9 +6,22 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="edu.pidev3a32.controllers.FrontGameListController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.pidev3a32.controllers.FrontGameListController">
+    <children>
+        <VBox prefHeight="400.0" prefWidth="600.0">
+            <children>
+                <HBox alignment="CENTER_RIGHT" prefHeight="53.0" prefWidth="600.0" spacing="20.0">
+                    <children>
+                        <fx:include source="Navbar.fxml"/>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="55.0" prefWidth="600.0" spacing="50.0">
+                    <children>
+                        <TextField fx:id="tfSearch" prefHeight="25.0" prefWidth="406.0" />
+                    </children>
+                </HBox>
+                <ListView fx:id="lvGames" prefHeight="348.0" prefWidth="600.0" />
+            </children>
+        </VBox>
+    </children>
 </AnchorPane>
