@@ -5,10 +5,15 @@ import edu.pidev3a32.services.GameService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
 
 public class FrontGameListController {
@@ -48,6 +53,29 @@ public class FrontGameListController {
             filterList(newVal);
             showSuggestions(newVal);
         });
+
+        lvGames.setOnMouseClicked(event -> {
+                Game selected = lvGames.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    try {
+                        goToGameDetails(selected);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+        });
+    }
+
+    @FXML
+    private void goToGameDetails(Game selectedGame) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FrontOffice/GameDetails.fxml"));
+        Parent root = loader.load();
+
+        FrontGameDetailsController controller = loader.getController();
+        controller.setGame(selectedGame);
+
+        Stage stage = (Stage) lvGames.getScene().getWindow();
+        stage.setScene(new Scene(root));
     }
 
     private void loadGames() {

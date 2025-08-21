@@ -1,5 +1,6 @@
 package edu.pidev3a32.services;
 
+import edu.pidev3a32.entities.Tournament;
 import edu.pidev3a32.interfaces.IService;
 import edu.pidev3a32.entities.Game;
 import edu.pidev3a32.tools.MyConnection;
@@ -73,10 +74,29 @@ public class GameService implements IService<Game> {
     @Override
     public List<Game> getAllData() {
         List<Game> list = new ArrayList<>();
-        String req = "SELECT * FROM game";
+        String req = """
+        SELECT g.id, g.date, g.team1, g.team2, g.score,
+               t.id AS t_id, t.name AS t_name, t.start_date, t.end_date
+        FROM game g
+        LEFT JOIN tournament t ON g.tournament_id = t.id
+    """;
+
         try (Statement st = cnx.createStatement();
              ResultSet rs = st.executeQuery(req)) {
+
             while (rs.next()) {
+                Tournament tournament = null;
+                int tId = rs.getInt("t_id");
+                if (!rs.wasNull()) {
+                    tournament = new Tournament(
+                            tId,
+                            rs.getString("t_name"),
+                            rs.getDate("start_date").toLocalDate(),
+                            rs.getDate("end_date").toLocalDate()
+                    );
+                }
+
+                // Build Game
                 Game g = new Game(
                         rs.getInt("id"),
                         rs.getDate("date").toLocalDate(),
@@ -84,6 +104,8 @@ public class GameService implements IService<Game> {
                         rs.getString("team2"),
                         rs.getString("score")
                 );
+                g.setTournament(tournament);
+
                 list.add(g);
             }
         } catch (SQLException e) {
@@ -91,4 +113,5 @@ public class GameService implements IService<Game> {
         }
         return list;
     }
+
 }

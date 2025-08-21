@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.pidev3a32.controllers.FrontTournamentDetailsController">
+   <children>
+      <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="51.0" prefWidth="600.0" spacing="10.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#goToFrontOfficeTournamentList" text="Go Back" />
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </HBox>
+            <Text fx:id="txtTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Tournament Name" />
+            <Text fx:id="txtDateRange" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Date - End Date" />
+            <Text fx:id="txtStatus" strokeType="OUTSIDE" strokeWidth="0.0" text="Upcoming" />
+            <Text fx:id="txtNbGames" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+            <ListView fx:id="lvGames" prefHeight="285.0" prefWidth="600.0" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

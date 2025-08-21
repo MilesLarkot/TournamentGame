@@ -1,5 +1,6 @@
 package edu.pidev3a32.services;
 
+import edu.pidev3a32.entities.Game;
 import edu.pidev3a32.entities.Tournament;
 import edu.pidev3a32.interfaces.IService;
 import edu.pidev3a32.tools.MyConnection;
@@ -60,8 +61,10 @@ public class TournamentService implements IService<Tournament> {
     public List<Tournament> getAllData() {
         List<Tournament> list = new ArrayList<>();
         String req = "SELECT * FROM tournament";
+
         try (Statement st = cnx.createStatement();
              ResultSet rs = st.executeQuery(req)) {
+
             while (rs.next()) {
                 Tournament t = new Tournament(
                         rs.getInt("id"),
@@ -69,6 +72,23 @@ public class TournamentService implements IService<Tournament> {
                         rs.getDate("start_date").toLocalDate(),
                         rs.getDate("end_date").toLocalDate()
                 );
+
+                String gameReq = "SELECT * FROM game WHERE tournament_id = ?";
+                try (PreparedStatement ps = cnx.prepareStatement(gameReq)) {
+                    ps.setInt(1, t.getId());
+                    ResultSet gameRs = ps.executeQuery();
+                    while (gameRs.next()) {
+                        Game g = new Game(
+                                gameRs.getInt("id"),
+                                gameRs.getDate("date").toLocalDate(),
+                                gameRs.getString("team1"),
+                                gameRs.getString("team2"),
+                                gameRs.getString("score")
+                        );
+                        g.setTournament(t);
+                        t.addGame(g);
+                    }
+                }
                 list.add(t);
             }
         } catch (SQLException e) {
@@ -76,4 +96,5 @@ public class TournamentService implements IService<Tournament> {
         }
         return list;
     }
+
 }

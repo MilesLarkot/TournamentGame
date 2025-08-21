@@ -1,14 +1,20 @@
 package edu.pidev3a32.controllers;
 
+import edu.pidev3a32.entities.Game;
 import edu.pidev3a32.entities.Tournament;
 import edu.pidev3a32.services.TournamentService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
 
 public class FrontTournamentListController {
@@ -61,8 +67,31 @@ public class FrontTournamentListController {
             filterList(newVal);
             showSuggestions(newVal);
         });
+
+        lvTournaments.setOnMouseClicked(event -> {
+            Tournament selected = lvTournaments.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                try {
+                    goToTournamentDetails(selected);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
+
+    @FXML
+    private void goToTournamentDetails(Tournament selectedTournament) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FrontOffice/TournamentDetails.fxml"));
+        Parent root = loader.load();
+
+        FrontTournamentDetailsController controller = loader.getController();
+        controller.setTournament(selectedTournament);
+
+        Stage stage = (Stage) lvTournaments.getScene().getWindow();
+        stage.setScene(new Scene(root));
+    }
 
     private void loadTournaments() {
         List<Tournament> tournaments = tournamentService.getAllData();
