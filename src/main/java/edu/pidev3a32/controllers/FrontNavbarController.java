@@ -11,6 +11,8 @@ import javafx.scene.Node;
 import java.io.IOException;
 
 public class FrontNavbarController {
+    @FXML
+    void logOut(ActionEvent event) { switchScene(event, "/FrontOffice/SignIn.fxml");}
 
     @FXML
     void goToHome(ActionEvent event) { switchScene(event, "/FrontOffice/Home.fxml"); }

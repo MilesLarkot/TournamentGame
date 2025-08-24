@@ -26,7 +26,7 @@ public class BackNavbarController {
 
     @FXML
     void logout(ActionEvent event) {
-        navigateTo(event, "/FrontOffice/Login.fxml");
+        navigateTo(event, "/FrontOffice/SignIn.fxml");
     }
 
     @FXML
