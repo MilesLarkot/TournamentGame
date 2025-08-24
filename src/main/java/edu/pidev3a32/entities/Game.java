@@ -25,6 +25,13 @@ public class Game {
         this.score = score;
     }
 
+    public Game(LocalDate date, String team1, String team2, Tournament tournament) {
+        this.date = date;
+        this.team1 = team1;
+        this.team2 = team2;
+        this.tournament = tournament;
+        this.score = "";
+    }
 
     public LocalDate getDate() {
         return date;
@@ -74,7 +81,7 @@ public class Game {
                 ", date=" + date +
                 ", team2='" + team2 + '\'' +
                 ", score='" + score + '\'' +
-                ", tournament=" + tournament +
+                ", tournament=" + tournament.getId() +
                 '}';
     }
 

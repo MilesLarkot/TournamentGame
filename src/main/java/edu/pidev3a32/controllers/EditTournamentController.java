@@ -15,49 +15,52 @@ import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import static edu.pidev3a32.tools.Toast.showToast;
 import static edu.pidev3a32.tools.Toast.showWarning;
 
-public class CreateTournamentController {
+public class EditTournamentController {
 
     @FXML
-    private Button btnAddTeam;
+    private Button btnUpdate;
 
     @FXML
-    private Button btnCreate;
+    private Button btnCancel;
 
     @FXML
     private Button btnGenerateTeamName;
 
     @FXML
-    private ListView<String> lvTeams;
+    private Button btnAddTeam;
 
     @FXML
-    private TextField tfTeamName;
-
-    @FXML
-    private DatePicker dpEnd;
+    private TextField tfName;
 
     @FXML
     private DatePicker dpStart;
 
     @FXML
-    private TextField tfName;
+    private DatePicker dpEnd;
 
-    private TournamentService tournamentService = new TournamentService();
+    @FXML
+    private TextField tfTeamName;
+
+    @FXML
+    private ListView<String> lvTeams;
+
+    private final TournamentService tournamentService = new TournamentService();
     private ValidationSupport validationSupport;
+
+    private Tournament currentTournament;
 
     @FXML
     public void initialize() {
         validationSupport = new ValidationSupport();
         validationSupport.registerValidator(tfName, true, Validator.createEmptyValidator("Tournament name required."));
-        validationSupport.registerValidator(dpStart, true,
-                Validator.createEmptyValidator("Start date is required"));
-        validationSupport.registerValidator(dpEnd, true,
-                Validator.createEmptyValidator("End date is required"));
+        validationSupport.registerValidator(dpStart, true, Validator.createEmptyValidator("Start date is required"));
+        validationSupport.registerValidator(dpEnd, true, Validator.createEmptyValidator("End date is required"));
 
         lvTeams.setCellFactory(param -> new ListCell<>() {
             private final Button btnDelete = new Button("Delete");
@@ -86,6 +89,18 @@ public class CreateTournamentController {
         });
     }
 
+    public void setTournament(Tournament t) {
+        this.currentTournament = t;
+
+        tfName.setText(t.getName());
+        dpStart.setValue(t.getStartDate());
+        dpEnd.setValue(t.getEndDate());
+
+        lvTeams.getItems().clear();
+        if (t.getTeams() != null) {
+            lvTeams.getItems().addAll(t.getTeams());
+        }
+    }
 
     @FXML
     void generateTeamName(ActionEvent event) {
@@ -109,7 +124,7 @@ public class CreateTournamentController {
     }
 
     @FXML
-    void createTournament(ActionEvent event) {
+    void updateTournament(ActionEvent event) {
         if (validationSupport.isInvalid()) {
             showWarning("Please fix the validation errors before submitting!");
             return;
@@ -124,28 +139,16 @@ public class CreateTournamentController {
             return;
         }
 
-        var teams = lvTeams.getItems();
+        currentTournament.setName(name);
+        currentTournament.setStartDate(start);
+        currentTournament.setEndDate(end);
 
-        Tournament t = new Tournament(name, start, end);
-        t.setTeams(teams);
+        currentTournament.setTeams(new ArrayList<>(lvTeams.getItems()));
 
+        tournamentService.updateEntity(currentTournament.getId(), currentTournament);
 
-        try {
-            tournamentService.addEntity(t);
-            showToast("Tournament created successfully!");
-            clearForm();
-            goToTournamentList(event);
-        } catch (SQLException ex) {
-            showWarning("Error creating tournament: " + ex.getMessage());
-        }
-    }
-
-    private void clearForm() {
-        tfName.clear();
-        tfTeamName.clear();
-        dpStart.setValue(null);
-        dpEnd.setValue(null);
-        lvTeams.getItems().clear();
+        showToast("Tournament updated successfully!");
+        goToTournamentList(event);
     }
 
     @FXML
@@ -153,7 +156,6 @@ public class CreateTournamentController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/BackOffice/TournamentList.fxml"));
             Parent root = loader.load();
-
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();

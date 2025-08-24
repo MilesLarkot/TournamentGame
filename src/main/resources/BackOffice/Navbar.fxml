@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="edu.pidev3a32.controllers.BackNavbarController"
+      spacing="10" style="-fx-padding: 10;">
+    <Button fx:id="btnHome" text="Home" onAction="#goToHome"/>
+    <Button fx:id="btnGames" text="Games" onAction="#goToGames"/>
+    <Button fx:id="btnTournaments" text="Tournaments" onAction="#goToTournaments"/>
+    <Button fx:id="btnUsers" text="Users" onAction="#goToUsers"/>
+    <Button fx:id="btnLogout" text="Logout" onAction="#logout"/>
+</HBox>
+

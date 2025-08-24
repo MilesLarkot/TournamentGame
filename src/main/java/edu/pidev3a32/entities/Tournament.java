@@ -10,6 +10,7 @@ public class Tournament {
     private LocalDate startDate;
     private LocalDate endDate;
     private List<Game> games;
+    private List<String> teams;
 
     public Tournament(int id, String name, LocalDate startDate, LocalDate endDate) {
         this.id = id;
@@ -17,12 +18,15 @@ public class Tournament {
         this.startDate = startDate;
         this.endDate = endDate;
         this.games = new ArrayList<>();
+        this.teams = new ArrayList<>();
     }
 
     public Tournament(String name, LocalDate startDate, LocalDate endDate) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.games = new ArrayList<>();
+        this.teams = new ArrayList<>();
     }
 
 
@@ -47,6 +51,21 @@ public class Tournament {
 
     public List<Game> getGames() { return games; }
 
+    public List<String> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(List<String> teams) {
+        this.teams = teams;
+    }
+
+    public void addTeam(String team) {
+        this.teams.add(team);
+    }
+
+    public void setGames(List<Game> games) {
+        this.games = games;
+    }
 
     @Override
     public String toString() {
@@ -56,6 +75,7 @@ public class Tournament {
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", games=" + games +
+                ", teams=" + teams +
                 '}';
     }
 }
