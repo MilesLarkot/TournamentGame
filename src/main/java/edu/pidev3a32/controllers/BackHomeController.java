@@ -1,31 +1,29 @@
 package edu.pidev3a32.controllers;
 
+import edu.pidev3a32.entities.Logger;
 import edu.pidev3a32.services.GameService;
+import edu.pidev3a32.services.LoggerService;
 import edu.pidev3a32.services.TournamentService;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class BackHomeController {
 
     @FXML
-    private Button btnAddGame;
-
-    @FXML
-    private Button btnAddTournament;
-
-    @FXML
-    private ListView<?> lvLogs;
+    private ListView<Logger> lvLogs;
 
     @FXML
     private Text txtOngoingTournaments;
@@ -38,6 +36,8 @@ public class BackHomeController {
 
     @FXML
     private Text txtTotalTournaments;
+
+    private final LoggerService loggerService = new LoggerService();
 
     @FXML
     void goToCreateGame(ActionEvent event) {
@@ -79,7 +79,49 @@ public class BackHomeController {
         txtOngoingTournaments.setText(String.valueOf(ongoingTournaments));
         txtTotalGames.setText(String.valueOf(totalGames));
         txtTotalOngoingGames.setText(String.valueOf(ongoingGames));
+
+        loadLogs();
     }
 
+    private void loadLogs() {
+        var logs = loggerService.getLogs();
+        lvLogs.setItems(FXCollections.observableArrayList(logs));
 
+        lvLogs.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(Logger log, boolean empty) {
+                super.updateItem(log, empty);
+                if (empty || log == null) {
+                    setText(null);
+                } else {
+                    String time = log.getTimestamp().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                    setText("[" + time + "] " + log.getAction());
+                }
+            }
+        });
+
+        lvLogs.setOnMouseClicked(event -> {
+                Logger selectedLog = lvLogs.getSelectionModel().getSelectedItem();
+                if (selectedLog != null) {
+                    try {
+                        goToLogDetails(selectedLog, event);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+        });
+    }
+
+    private void goToLogDetails(Logger log, javafx.scene.input.MouseEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/BackOffice/LogDetails.fxml"));
+        Parent root = loader.load();
+
+        LogDetailsController controller = loader.getController();
+        controller.setLog(log);
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
 }

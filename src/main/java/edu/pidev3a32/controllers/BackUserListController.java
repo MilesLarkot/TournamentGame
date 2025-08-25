@@ -30,52 +30,57 @@ public class BackUserListController {
     private void initialize() {
         loadUsers();
 
-        lvUsers.setCellFactory(param -> new ListCell<>() {
-            @Override
-            protected void updateItem(User user, boolean empty) {
-                super.updateItem(user, empty);
+        lvUsers.setCellFactory(param -> {
+            ListCell<User> cell = new ListCell<>() {
+                @Override
+                protected void updateItem(User user, boolean empty) {
+                    super.updateItem(user, empty);
 
-                if (empty || user == null) {
-                    setGraphic(null);
-                } else {
-                    Label username = new Label(user.getUsername());
+                    if (empty || user == null) {
+                        setGraphic(null);
+                        setOnMouseClicked(null);
+                    } else {
+                        Label username = new Label(user.getUsername());
 
-                    ComboBox<String> roleBox = new ComboBox<>();
-                    roleBox.setItems(FXCollections.observableArrayList("ADMIN", "USER"));
-                    roleBox.setValue(user.getRole());
+                        ComboBox<String> roleBox = new ComboBox<>();
+                        roleBox.setItems(FXCollections.observableArrayList("ADMIN", "USER"));
+                        roleBox.setValue(user.getRole());
 
-                    roleBox.setOnAction(e -> {
-                        user.setRole(roleBox.getValue());
-                        userService.updateEntity(user.getId(), user);
-                        showToast("Role updated for " + user.getUsername());
-                    });
+                        roleBox.setOnAction(e -> {
+                            user.setRole(roleBox.getValue());
+                            userService.updateEntity(user.getId(), user);
+                            showToast("Role updated for " + user.getUsername());
+                        });
 
-                    Button editButton = new Button("Edit");
-                    editButton.setOnAction(e -> {
-                        try {
-                            goToEditUser(user, e);
-                        } catch (IOException ex) {
-                            showWarning("Error opening Edit User: " + ex.getMessage());
-                        }
-                    });
+                        Button deleteButton = new Button("Delete");
+                        deleteButton.setStyle("-fx-background-color: #ffce00;");
+                        deleteButton.setOnAction(e -> {
+                            userService.deleteEntity(user);
+                            loadUsers();
+                            showToast("User deleted!");
+                        });
 
-                    Button deleteButton = new Button("Delete");
-                    deleteButton.setOnAction(e -> {
-                        userService.deleteEntity(user);
-                        loadUsers();
-                        showToast("User deleted!");
-                    });
+                        HBox row = new HBox(15, username, roleBox, deleteButton);
+                        setGraphic(row);
 
-                    HBox row = new HBox(15, username, roleBox, editButton, deleteButton);
-                    setGraphic(row);
+                        setOnMouseClicked(event -> {
+                            if ( !isEmpty()) {
+                                try {
+                                    goToEditUser(user);
+                                } catch (IOException ex) {
+                                    showWarning("Error opening Edit User: " + ex.getMessage());
+                                }
+                            }
+                        });
+                    }
                 }
-            }
+            };
+            return cell;
         });
     }
 
     private void loadUsers() {
         List<User> users = userService.getAllData();
-        System.out.println(users);
         lvUsers.setItems(FXCollections.observableArrayList(users));
     }
 
@@ -92,14 +97,14 @@ public class BackUserListController {
         }
     }
 
-    private void goToEditUser(User selectedUser, ActionEvent event) throws IOException {
+    private void goToEditUser(User selectedUser) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/BackOffice/EditUser.fxml"));
         Parent root = loader.load();
 
-  //      EditUserController controller = loader.getController();
-  //      controller.setUser(selectedUser);
+        EditUserController controller = loader.getController();
+        controller.setUser(selectedUser);
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) lvUsers.getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
     }

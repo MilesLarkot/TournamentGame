@@ -1,5 +1,6 @@
 package edu.pidev3a32.controllers;
 
+import edu.pidev3a32.tools.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +28,7 @@ public class BackNavbarController {
     @FXML
     void logout(ActionEvent event) {
         navigateTo(event, "/FrontOffice/SignIn.fxml");
+        SessionManager.clear();
     }
 
     @FXML

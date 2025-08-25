@@ -1,13 +1,18 @@
 package edu.pidev3a32.services;
 
+import edu.pidev3a32.entities.Logger;
 import edu.pidev3a32.entities.Tournament;
 import edu.pidev3a32.interfaces.IService;
 import edu.pidev3a32.entities.Game;
 import edu.pidev3a32.tools.MyConnection;
+import edu.pidev3a32.tools.SessionManager;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static edu.pidev3a32.tools.Toast.showToast;
+import static edu.pidev3a32.tools.Toast.showWarning;
 
 public class GameService implements IService<Game> {
     private Connection cnx;
@@ -15,6 +20,8 @@ public class GameService implements IService<Game> {
     public GameService() {
         cnx = MyConnection.getInstance().getCnx();
     }
+
+    LoggerService loggerService = new LoggerService();
 
     @Override
     public void addEntity(Game g) throws SQLException {
@@ -32,7 +39,8 @@ public class GameService implements IService<Game> {
             }
 
             ps.executeUpdate();
-            System.out.println("Game added!");
+            loggerService.logAction(new Logger(SessionManager.getCurrentUser().getId(), "ADD_GAME", "created game id: " + g.getId()));
+            showToast("Game added!");
         }
     }
 
@@ -42,9 +50,10 @@ public class GameService implements IService<Game> {
         try (PreparedStatement ps = cnx.prepareStatement(req)) {
             ps.setInt(1, g.getId());
             ps.executeUpdate();
-            System.out.println("Game deleted!");
+            loggerService.logAction(new Logger(SessionManager.getCurrentUser().getId(), "DELETE_GAME", "Deleted game id: " + g.getId()));
+            showToast("Game deleted!");
         } catch (SQLException e) {
-            System.out.println("Error deleting game: " + e.getMessage());
+            showWarning("Error deleting game: " + e.getMessage());
         }
     }
 
@@ -65,6 +74,7 @@ public class GameService implements IService<Game> {
 
             ps.setInt(6, id);
             ps.executeUpdate();
+            loggerService.logAction(new Logger(SessionManager.getCurrentUser().getId(), "UPDATE_GAME", "Updated game id: " + id));
             System.out.println("Game updated!");
         } catch (SQLException e) {
             System.out.println("Error updating game: " + e.getMessage());

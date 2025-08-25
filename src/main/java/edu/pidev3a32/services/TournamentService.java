@@ -1,9 +1,11 @@
 package edu.pidev3a32.services;
 
 import edu.pidev3a32.entities.Game;
+import edu.pidev3a32.entities.Logger;
 import edu.pidev3a32.entities.Tournament;
 import edu.pidev3a32.interfaces.IService;
 import edu.pidev3a32.tools.MyConnection;
+import edu.pidev3a32.tools.SessionManager;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -13,9 +15,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static edu.pidev3a32.tools.Toast.showToast;
+import static edu.pidev3a32.tools.Toast.showWarning;
+
 public class TournamentService implements IService<Tournament> {
 
     private final Connection cnx;
+
+    LoggerService loggerService =  new LoggerService();
 
     public TournamentService() {
         cnx = MyConnection.getInstance().getCnx();
@@ -74,6 +81,8 @@ public class TournamentService implements IService<Tournament> {
 
                 insertTeams(tournamentId, t.getTeams());
             }
+            loggerService.logAction(new Logger(SessionManager.getCurrentUser().getId(), "CREATE_TOURNAMENT", "Created tournament id: " + t.getId()));
+            showToast("Created tournament id: " + t.getId());
         }
     }
 
@@ -82,19 +91,19 @@ public class TournamentService implements IService<Tournament> {
         String deleteTeams = "DELETE FROM tournament_team WHERE tournament_id=?";
         String deleteTournament = "DELETE FROM tournament WHERE id=?";
         try {
-            // First delete dependent rows
             try (PreparedStatement ps = cnx.prepareStatement(deleteTeams)) {
                 ps.setInt(1, t.getId());
                 ps.executeUpdate();
             }
-            // Then delete the tournament itself
             try (PreparedStatement ps = cnx.prepareStatement(deleteTournament)) {
                 ps.setInt(1, t.getId());
                 ps.executeUpdate();
             }
+            loggerService.logAction(new Logger(SessionManager.getCurrentUser().getId(), "DELETE_TOURNAMENT", "Deleted tournament id: " + t.getId()));
             System.out.println("Tournament and teams deleted!");
+            showToast("Tournament and teams deleted!");
         } catch (SQLException e) {
-            System.out.println("Error deleting tournament: " + e.getMessage());
+            showWarning("Error delete tournament and teams: " + e.getMessage());
         }
     }
 
@@ -115,9 +124,11 @@ public class TournamentService implements IService<Tournament> {
 
             insertTeams(id, t.getTeams());
 
-            System.out.println("Tournament updated with teams!");
+            loggerService.logAction(new Logger(SessionManager.getCurrentUser().getId(), "UPDATE_TOURNAMENT", "Updated tournament id: " + t.getId()));
+
+            showToast("Tournament updated with teams!");
         } catch (SQLException e) {
-            System.out.println("Error updating tournament: " + e.getMessage());
+            showWarning("Error updating tournament: " + e.getMessage());
         }
     }
 

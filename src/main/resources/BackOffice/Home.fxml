@@ -2,7 +2,9 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -10,6 +12,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.pidev3a32.controllers.BackHomeController">
@@ -32,78 +35,95 @@
                         <Insets left="10.0" />
                      </padding>
                   </VBox>
-                  <GridPane prefHeight="350.0" prefWidth="350.0">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Pane prefHeight="200.0" prefWidth="172.0">
+                  <ScrollPane fitToHeight="true" fitToWidth="true">
+                    <content>
+                      <AnchorPane minHeight="660.0" minWidth="0.0">
                            <children>
-                              <VBox alignment="CENTER" layoutX="12.0" layoutY="33.0" prefHeight="110.0" prefWidth="149.0" style="-fx-background-color: white; -fx-border-radius: 10;">
+                              <VBox prefWidth="449.0" spacing="10.0">
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Tournaments" />
-                                    <Text fx:id="txtTotalTournaments" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                                    <GridPane prefHeight="247.0" prefWidth="449.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <Pane prefHeight="200.0" prefWidth="172.0">
+                                             <children>
+                                                <VBox alignment="CENTER" layoutX="45.0" layoutY="26.0" prefHeight="110.0" prefWidth="149.0" style="-fx-background-color: white; -fx-border-radius: 10;">
+                                                   <children>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Tournaments" />
+                                                      <Text fx:id="txtTotalTournaments" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                          </Pane>
+                                          <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                                             <children>
+                                                <VBox alignment="CENTER" layoutX="53.0" layoutY="26.0" prefHeight="110.0" prefWidth="133.0" style="-fx-background-color: white; -fx-border-radius: 10;">
+                                                   <children>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Games" />
+                                                      <Text fx:id="txtTotalGames" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                          </Pane>
+                                          <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                             <children>
+                                                <VBox alignment="CENTER" layoutX="45.0" layoutY="26.0" prefHeight="110.0" prefWidth="149.0" style="-fx-background-color: white; -fx-border-radius: 10;">
+                                                   <children>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Ongoing Tournaments" textAlignment="CENTER" wrappingWidth="82.408203125" />
+                                                      <Text fx:id="txtOngoingTournaments" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                          </Pane>
+                                          <Pane prefHeight="200.0" prefWidth="198.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                             <children>
+                                                <VBox alignment="CENTER" layoutX="53.0" layoutY="26.0" prefHeight="110.0" prefWidth="133.0" style="-fx-background-color: white; -fx-border-radius: 10;">
+                                                   <children>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Upcoming Games" textAlignment="CENTER" wrappingWidth="73.984375" />
+                                                      <Text fx:id="txtTotalOngoingGames" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                          </Pane>
+                                       </children>
+                                    </GridPane>
+                                    <Label style="-fx-font-weight: bold;" text="Logs:">
+                                       <VBox.margin>
+                                          <Insets left="10.0" top="10.0" />
+                                       </VBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <ListView fx:id="lvLogs" prefHeight="350.0" prefWidth="31.0">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" />
+                                       </VBox.margin>
+                                    </ListView>
                                  </children>
-                                 <padding>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                                 </padding>
                               </VBox>
                            </children>
-                        </Pane>
-                        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
-                           <children>
-                              <VBox alignment="CENTER" layoutX="21.0" layoutY="33.0" prefHeight="110.0" prefWidth="133.0" style="-fx-background-color: white; -fx-border-radius: 10;">
-                                 <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Games" />
-                                    <Text fx:id="txtTotalGames" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                                 </padding>
-                              </VBox>
-                           </children>
-                        </Pane>
-                        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
-                           <children>
-                              <VBox alignment="CENTER" layoutX="13.0" layoutY="32.0" prefHeight="110.0" prefWidth="149.0" style="-fx-background-color: white; -fx-border-radius: 10;">
-                                 <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Ongoing Tournaments" textAlignment="CENTER" wrappingWidth="82.408203125" />
-                                    <Text fx:id="txtOngoingTournaments" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                                 </padding>
-                              </VBox>
-                           </children>
-                        </Pane>
-                        <Pane prefHeight="200.0" prefWidth="175.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <children>
-                              <VBox alignment="CENTER" layoutX="21.0" layoutY="32.0" prefHeight="110.0" prefWidth="133.0" style="-fx-background-color: white; -fx-border-radius: 10;">
-                                 <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Upcoming Games" textAlignment="CENTER" wrappingWidth="73.984375" />
-                                    <Text fx:id="txtTotalOngoingGames" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                                 </padding>
-                              </VBox>
-                           </children>
-                        </Pane>
-                     </children>
-                  </GridPane>
-                  <VBox prefHeight="348.0" prefWidth="125.0" spacing="10.0">
-                     <children>
-                        <ListView fx:id="lvLogs" prefHeight="350.0" prefWidth="31.0">
-                           <VBox.margin>
-                              <Insets bottom="10.0" right="10.0" />
-                           </VBox.margin></ListView>
-                     </children>
-                  </VBox>
+                        </AnchorPane>
+                    </content>
+                  </ScrollPane>
                </children>
             </HBox>
             </children>

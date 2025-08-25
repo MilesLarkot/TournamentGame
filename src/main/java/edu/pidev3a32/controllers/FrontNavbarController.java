@@ -1,5 +1,6 @@
 package edu.pidev3a32.controllers;
 
+import edu.pidev3a32.tools.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +13,8 @@ import java.io.IOException;
 
 public class FrontNavbarController {
     @FXML
-    void logOut(ActionEvent event) { switchScene(event, "/FrontOffice/SignIn.fxml");}
+    void logOut(ActionEvent event) { switchScene(event, "/FrontOffice/SignIn.fxml");
+    SessionManager.clear();}
 
     @FXML
     void goToHome(ActionEvent event) { switchScene(event, "/FrontOffice/Home.fxml"); }

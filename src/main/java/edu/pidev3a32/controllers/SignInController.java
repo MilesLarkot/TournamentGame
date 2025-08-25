@@ -1,6 +1,8 @@
 package edu.pidev3a32.controllers;
 
 import edu.pidev3a32.entities.User;
+import edu.pidev3a32.services.UserService;
+import edu.pidev3a32.tools.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -31,33 +33,29 @@ public class SignInController {
     private Button btnLogin;
 
 
-    private static final List<User> users = new ArrayList<>();
+    private final UserService userService = new UserService();
 
-    static {
-        users.add(new User("admin", "admin123", "ADMIN"));
-        users.add(new User("john", "user123", "USER"));
-    }
 
     @FXML
     void signIn(ActionEvent event) {
         String username = tfUsername.getText();
         String password = pfPassword.getText();
+        User user = userService.authenticate(username, password);
 
-        for (User user : users) {
-            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                try {
-                    if ("ADMIN".equals(user.getRole())) {
-                        goToScene("/BackOffice/Home.fxml", event);
-                    } else {
-                        goToScene("/FrontOffice/Home.fxml", event);
-                    }
-                } catch (IOException e) {
-                    showWarning("Error loading scene: " + e.getMessage());
+        if (user != null) {
+            try {
+                if ("ADMIN".equals(user.getRole())) {
+                    goToScene("/BackOffice/Home.fxml", event);
+                } else {
+                    goToScene("/FrontOffice/Home.fxml", event);
                 }
-                return;
+                SessionManager.setCurrentUser(user);
+            } catch (IOException e) {
+                showWarning("Error loading scene: " + e.getMessage());
             }
+        } else {
+            showWarning("Invalid credentials!");
         }
-        showWarning("Invalid credentials!");
     }
 
     private void goToScene(String fxml, ActionEvent event) throws IOException {
